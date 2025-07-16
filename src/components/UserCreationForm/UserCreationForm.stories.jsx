@@ -14,7 +14,7 @@ export const Default = {
 
 export const WithValidationErrors = {
   args: {},
-  play: async ({ canvasElement }) => {
+  play: async () => {
     // This would be extended to show validation states
   },
 };

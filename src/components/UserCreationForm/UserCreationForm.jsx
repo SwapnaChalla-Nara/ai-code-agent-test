@@ -51,7 +51,7 @@ const UserCreationForm = () => {
       await createUser(formData);
       setSuccessMessage('User created successfully!');
       setFormData({ firstName: '', lastName: '', email: '' });
-    } catch (error) {
+    } catch {
       setErrorMessage('An error occurred while creating the user. Please try again later.');
     } finally {
       setIsSubmitting(false);
