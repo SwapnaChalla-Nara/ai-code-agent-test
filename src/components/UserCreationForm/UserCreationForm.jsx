@@ -23,7 +23,6 @@ const UserCreationForm = ({
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log('Field changed:', name, value);
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -32,7 +31,6 @@ const UserCreationForm = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Form submitted with formData:', formData);
     if (!isLoading && !isSuccess) {
       onSubmit(formData);
     }

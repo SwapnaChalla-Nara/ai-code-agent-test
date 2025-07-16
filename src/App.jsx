@@ -37,7 +37,6 @@ function App() {
   }, [])
 
   const handleSubmit = useCallback(async (formData) => {
-    console.log('Form submitted with data:', formData);
     // Clear previous states
     setApiError('')
     setValidationErrors({})
@@ -45,21 +44,18 @@ function App() {
     
     // Validate form
     const errors = validateForm(formData)
-    console.log('Validation errors:', errors);
     if (Object.keys(errors).length > 0) {
       setValidationErrors(errors)
       return
     }
     
     setIsLoading(true)
-    console.log('Starting API call...');
     
     try {
       await createUser(formData)
-      console.log('API call succeeded');
       setIsSuccess(true)
     } catch (error) {
-      console.error('API call failed:', error)
+      console.error('Error creating user:', error)
       // Show generic error message for any API failure
       setApiError('An error occurred while creating the user. Please try again later.')
       
@@ -69,7 +65,6 @@ function App() {
       }, 5000)
     } finally {
       setIsLoading(false)
-      console.log('API call completed');
     }
   }, [])
 
