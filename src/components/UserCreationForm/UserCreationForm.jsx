@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Box, 
   TextField, 
@@ -8,22 +8,22 @@ import {
   CircularProgress
 } from '@mui/material';
 
+const defaultInitialData = { firstName: '', lastName: '', email: '' };
+
 const UserCreationForm = ({ 
-  initialData = { firstName: '', lastName: '', email: '' },
+  initialData = defaultInitialData,
   errors = {},
   isLoading = false,
   isSuccess = false,
   apiError = '',
-  onSubmit = () => {}
+  onSubmit = () => {},
+  onDismissError = () => {}
 }) => {
   const [formData, setFormData] = useState(initialData);
 
-  useEffect(() => {
-    setFormData(initialData);
-  }, [initialData]);
-
   const handleChange = (event) => {
     const { name, value } = event.target;
+    console.log('Field changed:', name, value);
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -32,6 +32,7 @@ const UserCreationForm = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log('Form submitted with formData:', formData);
     if (!isLoading && !isSuccess) {
       onSubmit(formData);
     }
@@ -52,7 +53,11 @@ const UserCreationForm = ({
       
       {/* API Error Message */}
       {apiError && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <Alert 
+          severity="error" 
+          sx={{ mb: 2 }}
+          onClose={onDismissError}
+        >
           {apiError}
         </Alert>
       )}
