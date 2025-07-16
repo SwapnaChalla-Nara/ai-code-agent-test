@@ -93,11 +93,11 @@ describe('UserCreationForm', () => {
       const user = userEvent.setup();
       renderWithTheme(<UserCreationForm />);
       
+      // Fill ALL required fields but with invalid email
       const firstNameInput = screen.getByLabelText('First Name');
       const lastNameInput = screen.getByLabelText('Last Name');
       const emailInput = screen.getByLabelText('Email Address');
       
-      // Fill required fields but with invalid email
       await user.type(firstNameInput, 'John');
       await user.type(lastNameInput, 'Doe');
       await user.type(emailInput, 'invalid-email');
@@ -105,10 +105,8 @@ describe('UserCreationForm', () => {
       const createButton = screen.getByRole('button', { name: 'Create User' });
       await user.click(createButton);
       
-      // Check for the error message
-      await waitFor(() => {
-        expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
-      });
+      // Should show the invalid email error message  
+      expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
     });
 
     it('AC 2.5: should not trigger API POST request when validation fails', async () => {
