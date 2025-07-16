@@ -1,17 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Box, 
   TextField, 
   Button, 
-  Typography 
+  Typography,
+  Alert,
+  CircularProgress
 } from '@mui/material';
 
-const UserCreationForm = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: ''
-  });
+const UserCreationForm = ({ 
+  initialData = { firstName: '', lastName: '', email: '' },
+  errors = {},
+  isLoading = false,
+  isSuccess = false,
+  apiError = '',
+  onSubmit = () => {}
+}) => {
+  const [formData, setFormData] = useState(initialData);
+
+  useEffect(() => {
+    setFormData(initialData);
+  }, [initialData]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -23,8 +32,9 @@ const UserCreationForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // TODO: Implement form submission logic
-    console.log('Form submitted:', formData);
+    if (!isLoading && !isSuccess) {
+      onSubmit(formData);
+    }
   };
 
   return (
@@ -32,6 +42,20 @@ const UserCreationForm = () => {
       <Typography variant="h4" component="h1" gutterBottom>
         Create User
       </Typography>
+      
+      {/* Success Message */}
+      {isSuccess && (
+        <Alert severity="success" sx={{ mb: 2 }}>
+          User created successfully!
+        </Alert>
+      )}
+      
+      {/* API Error Message */}
+      {apiError && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {apiError}
+        </Alert>
+      )}
       
       <TextField
         fullWidth
@@ -41,6 +65,9 @@ const UserCreationForm = () => {
         onChange={handleChange}
         margin="normal"
         required
+        disabled={isLoading || isSuccess}
+        error={!!errors.firstName}
+        helperText={errors.firstName}
       />
       
       <TextField
@@ -51,6 +78,9 @@ const UserCreationForm = () => {
         onChange={handleChange}
         margin="normal"
         required
+        disabled={isLoading || isSuccess}
+        error={!!errors.lastName}
+        helperText={errors.lastName}
       />
       
       <TextField
@@ -62,6 +92,9 @@ const UserCreationForm = () => {
         onChange={handleChange}
         margin="normal"
         required
+        disabled={isLoading || isSuccess}
+        error={!!errors.email}
+        helperText={errors.email}
       />
       
       <Button
@@ -69,8 +102,10 @@ const UserCreationForm = () => {
         variant="contained"
         fullWidth
         sx={{ mt: 3, mb: 2 }}
+        disabled={isLoading || isSuccess}
+        startIcon={isLoading ? <CircularProgress size={20} /> : null}
       >
-        Create User
+        {isLoading ? 'Creating User...' : 'Create User'}
       </Button>
     </Box>
   );
